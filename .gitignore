@@ -31,3 +31,7 @@ node_modules
 *.ts
 *.mp4
 *.mpd
+
+.idea
+.vscode
+media

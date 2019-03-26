@@ -21,6 +21,7 @@ const context = require('./node_core_ctx');
 
 const streamsRoute = require('./api/routes/streams');
 const serverRoute = require('./api/routes/server');
+const knzk = require('./knzk');
 
 class NodeHttpServer {
   constructor(config) {
@@ -55,15 +56,17 @@ class NodeHttpServer {
 
     if (this.config.auth && this.config.auth.api) {
       app.use('/api/*', basicAuth(this.config.auth.api_user, this.config.auth.api_pass));
+      app.use('/api/streams', streamsRoute(context));
+      app.use('/api/server', serverRoute(context));
     }
-    app.use('/api/streams', streamsRoute(context));
-    app.use('/api/server', serverRoute(context));
+
+    app.use('/api/knzk', knzk.router(context, this.config));
 
     this.httpServer = Http.createServer(app);
 
     /**
      * ~ openssl genrsa -out privatekey.pem 1024
-     * ~ openssl req -new -key privatekey.pem -out certrequest.csr 
+     * ~ openssl req -new -key privatekey.pem -out certrequest.csr
      * ~ openssl x509 -req -in certrequest.csr -signkey privatekey.pem -out certificate.pem
      */
     if (this.config.https) {
