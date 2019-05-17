@@ -4,7 +4,7 @@ const axios = require('axios');
 const conf = require('./config');
 
 const config = {
-  logType: conf.debug ? 4 : 1,
+  logType: conf.debug ? 4 : 2,
   rtmp: {
     port: 1935,
     chunk_size: 100000,
