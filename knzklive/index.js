@@ -38,8 +38,7 @@ if (conf.ffmpeg_path) {
       app: 'live',
       ac: 'libopus',
       hls: true,
-      hlsFlags: '[hls_time=1:hls_list_size=3600]'
-      // 2(h) * 60 * 60 / 2(s) = 3600 大体2時間ぐらいおっかけ再生できるようにする
+      hlsFlags: '[hls_time=1:hls_list_size=3:hls_flags=delete_segments]'
     }
   ];
 
