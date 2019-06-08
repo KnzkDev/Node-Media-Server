@@ -38,7 +38,7 @@ if (conf.ffmpeg_path) {
       app: 'live',
       ac: 'libopus',
       hls: true,
-      hlsFlags: 'hls_time=1:hls_list_size=3:hls_flags=delete_segments'
+      hlsFlags: 'hls_time=1:hls_list_size=5:hls_flags=delete_segments'
     }
   ];
 
