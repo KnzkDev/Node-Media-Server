@@ -1,4 +1,4 @@
-const { NodeMediaServer } = require('../node_media_server');
+const NodeMediaServer = require('../node_media_server');
 const axios = require('axios');
 // eslint-disable-next-line import/no-unresolved
 const conf = require('./config');
@@ -51,10 +51,6 @@ if (conf.ffmpeg_path) {
 
 const nms = new NodeMediaServer(config);
 nms.run();
-
-nms.on('prePublish', (id, StreamPath, args) => {
-
-});
 
 nms.on('donePublish', (id, StreamPath, args) => {
   axios
