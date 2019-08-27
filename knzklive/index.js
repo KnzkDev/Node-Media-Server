@@ -1,4 +1,4 @@
-const { NodeMediaServer } = require('../index');
+const { NodeMediaServer } = require('../node_media_server');
 const axios = require('axios');
 // eslint-disable-next-line import/no-unresolved
 const conf = require('./config');
