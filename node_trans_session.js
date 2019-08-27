@@ -18,15 +18,24 @@ class NodeTransSession extends EventEmitter {
   }
 
   run() {
-    let vc = this.conf.args.vc == 7 ? 'copy' : 'libx264';
-    let ac = this.conf.args.ac == 10 ? 'copy' : 'aac';
-    let inPath = 'rtmp://127.0.0.1:' + this.conf.port + this.conf.streamPath;
-    let ouPath = `${this.conf.mediaroot}/${this.conf.app}/${this.conf.stream}`;
+    let vc = this.conf.vc || 'copy';
+    let ac = this.conf.ac || 'copy';
+    let inPath = 'rtmp://127.0.0.1:' + this.conf.rtmpPort + this.conf.streamPath;
+    let ouPath = `${this.conf.mediaroot}/${this.conf.streamApp}/${this.conf.streamName}`;
     let mapStr = '';
     const random = Math.random().toString(32).substring(2);
+
+    if (this.conf.rtmp && this.conf.rtmpApp) {
+      if (this.conf.rtmpApp === this.conf.streamApp) {
+        Logger.error('[Transmuxing RTMP] Cannot output to the same app.');
+      } else {
+        let rtmpOutput = `rtmp://127.0.0.1:${this.conf.rtmpPort}/${this.conf.rtmpApp}/${this.conf.streamName}`;
+        mapStr += `[f=flv]${rtmpOutput}|`;
+        Logger.log('[Transmuxing RTMP] ' + this.conf.streamPath + ' to ' + rtmpOutput);
+      }
+    }
     if (this.conf.mp4) {
       this.conf.mp4Flags = this.conf.mp4Flags ? this.conf.mp4Flags : '';
-      let now = new Date();
       let mp4FileName = dateFormat('yyyy-mm-dd-HH-MM') + '.mp4';
       let mapMp4 = `${this.conf.mp4Flags}${ouPath}/${mp4FileName}|`;
       mapStr += mapMp4;
@@ -47,8 +56,14 @@ class NodeTransSession extends EventEmitter {
       Logger.log('[Transmuxing DASH] ' + this.conf.streamPath + ' to ' + ouPath + '/' + dashFileName);
     }
     mkdirp.sync(ouPath);
-    let argv = ['-y', '-probesize', '32', '-flags', 'low_delay', '-fflags', 'nobuffer', '-analyzeduration', '2147483647', '-probesize', '2147483647', '-i', inPath, '-c:v', vc, '-g', '30', '-c:a', ac, '-f', 'tee', '-map', '0:a?', '-map', '0:v?', mapStr];
-    Logger.ffdebug(argv.toString());
+
+    let argv = ['-y', '-flags', 'low_delay', '-fflags', 'nobuffer', '-analyzeduration', '2147483647', '-probesize', '2147483647', '-i', inPath];
+    Array.prototype.push.apply(argv, ['-c:v', vc]);
+    Array.prototype.push.apply(argv, this.conf.vcParam);
+    Array.prototype.push.apply(argv, ['-c:a', ac]);
+    Array.prototype.push.apply(argv, this.conf.acParam);
+    Array.prototype.push.apply(argv, ['-f', 'tee', '-map', '0:a?', '-map', '0:v?', mapStr]);
+    argv = argv.filter((n) => { return n }); //去空
     this.ffmpeg_exec = spawn(this.conf.ffmpeg, argv);
     this.ffmpeg_exec.on('error', (e) => {
       Logger.ffdebug(e);
@@ -71,7 +86,8 @@ class NodeTransSession extends EventEmitter {
             if (filename.endsWith('.ts')
               || filename.endsWith('.m3u8')
               || filename.endsWith('.mpd')
-              || filename.endsWith('.m4s')) {
+              || filename.endsWith('.m4s')
+              || filename.endsWith('.tmp')) {
               fs.unlinkSync(ouPath + '/' + filename);
             }
           })
@@ -81,8 +97,7 @@ class NodeTransSession extends EventEmitter {
   }
 
   end() {
-    // this.ffmpeg_exec.kill('SIGINT');
-    this.ffmpeg_exec.stdin.write('q');
+    this.ffmpeg_exec.kill();
   }
 }
 

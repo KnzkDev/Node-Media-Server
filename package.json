@@ -1,8 +1,8 @@
 {
   "name": "node-media-server",
-  "version": "1.4.14",
+  "version": "2.1.2",
   "description": "A Node.js implementation of RTMP Server",
-  "main": "index.js",
+  "main": "node_media_server.js",
   "scripts": {
     "test": "node app.js"
   },
@@ -28,7 +28,7 @@
     "chalk": "^2.4.2",
     "dateformat": "^3.0.3",
     "express": "^4.16.4",
-    "lodash": "^4.17.11",
+    "lodash": ">=4.17.13",
     "mkdirp": "^0.5.1",
     "ws": "^5.2.2"
   },
