@@ -3,8 +3,10 @@ const axios = require('axios');
 // eslint-disable-next-line import/no-unresolved
 const conf = require('./config');
 
+const IS_DEBUG = process.env.NODE_ENV === 'development';
+
 const config = {
-  logType: conf.debug ? 4 : 2,
+  logType: IS_DEBUG ? 4 : 2,
   rtmp: {
     port: 1935,
     chunk_size: 100000,
@@ -20,7 +22,7 @@ const config = {
   knzklive: {
     api_endpoint: conf.endpoint,
     api_key: conf.APIKey,
-    ignore_auth: !!conf.debug
+    ignore_auth: !!IS_DEBUG
   }
 };
 
