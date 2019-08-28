@@ -1,10 +1,12 @@
-const { NodeMediaServer } = require('../index');
+const NodeMediaServer = require('../node_media_server');
 const axios = require('axios');
 // eslint-disable-next-line import/no-unresolved
 const conf = require('./config');
 
+const IS_DEBUG = process.env.NODE_ENV === 'development';
+
 const config = {
-  logType: conf.debug ? 4 : 2,
+  logType: IS_DEBUG ? 4 : 2,
   rtmp: {
     port: 1935,
     chunk_size: 100000,
@@ -20,7 +22,7 @@ const config = {
   knzklive: {
     api_endpoint: conf.endpoint,
     api_key: conf.APIKey,
-    ignore_auth: !!conf.debug
+    ignore_auth: !!IS_DEBUG
   }
 };
 
@@ -36,7 +38,8 @@ if (conf.ffmpeg_path) {
   const tasks = [
     {
       app: 'live',
-      ac: 'libopus',
+      ac: 'copy',
+      vc: 'copy',
       hls: true,
       hlsFlags: 'hls_time=1:hls_list_size=5:hls_flags=delete_segments'
     }
@@ -50,10 +53,6 @@ if (conf.ffmpeg_path) {
 
 const nms = new NodeMediaServer(config);
 nms.run();
-
-nms.on('prePublish', (id, StreamPath, args) => {
-
-});
 
 nms.on('donePublish', (id, StreamPath, args) => {
   axios
