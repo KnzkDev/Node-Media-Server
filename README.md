@@ -1,3 +1,27 @@
+# Node-Media-Server nzws-modified
+
+> 不特定多数が配信する事を想定した改造を施したNode.js製rtmpサーバです。
+
+## 特徴
+
+- トークンによるPublish時の認証
+- 配信の強制終了
+
+## 認証フロー
+
+![image](https://i.imgur.com/Tr8Yxd0.png)
+
+> どういう動きしてるのか分かりにくいって言われたので作ったけど正直こっちの方が分かりにくい気がしてきたって言いながら作ってた
+
+## 下記のサービスで使用されています
+
+- [KnzkLive](https://live.knzk.me)
+- [MisskeyLive](https://live.misskey.io)
+
+> まだこのリストに追加されていないサービスがあればPRください
+
+---
+
 # Node-Media-Server
 [![npm](https://img.shields.io/node/v/node-media-server.svg)](https://nodejs.org/en/)
 [![npm](https://img.shields.io/npm/v/node-media-server.svg)](https://npmjs.org/package/node-media-server)

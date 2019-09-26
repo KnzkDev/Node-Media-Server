@@ -1,0 +1,31 @@
+!define Publisher 配信者
+!define PublishServer 配信サーバ
+!define Backend 配信サイトのバックエンド
+
+note over Backend
+バックエンドが適当にトークンを降り出す
+endnote
+
+Backend -> Publisher: 配信ソフトに入力する配信サーバ情報, ストリームキー を表示する
+
+note over Publisher
+ストリームキーのパラメータにtokenがある
+endnote
+
+Publisher -> PublishServer: 配信ソフトを使用して配信開始する
+PublishServer -> Backend: Tokenパラメータを元に正しい配信者か検証する
+
+== 正しければ ==
+Backend -> PublishServer: 200を返す
+
+note over Publisher
+配信開始
+endnote
+
+== 不正であれば ==
+Backend -> PublishServer: 40xを返す
+PublishServer -> Publisher: セッションをリジェクトする
+
+note over Publisher
+配信開始できない
+endnote
