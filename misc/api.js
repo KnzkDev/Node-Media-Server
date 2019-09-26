@@ -2,7 +2,7 @@ const axios = require('axios');
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const config = require('./knzklive/config');
+const config = require('./config');
 
 module.exports.api = (token, streamPath, mode = 'verify') => 
   axios.get(config.APIUrl, {

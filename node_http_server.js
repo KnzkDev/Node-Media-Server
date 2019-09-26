@@ -24,7 +24,7 @@ const streamsRoute = require('./api/routes/streams');
 const serverRoute = require('./api/routes/server');
 const relayRoute = require('./api/routes/relay');
 
-const knzk = require('./knzk');
+const API = require('./misc/api');
 
 class NodeHttpServer {
   constructor(config) {
@@ -60,7 +60,8 @@ class NodeHttpServer {
       app.use('/api/server', serverRoute(context));
       app.use('/api/relay', relayRoute(context));
     }
-    app.use('/api/knzk', knzk.router(context));
+    app.use('/api/knzk', API.router(context)); // 後方互換性
+    app.use('/api/misc', API.router(context));
 
     app.use(Express.static(path.join(__dirname + '/public')));
     app.use(Express.static(this.mediaroot));

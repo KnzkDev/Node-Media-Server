@@ -35,4 +35,6 @@ node_modules
 .idea
 .vscode
 media
+
 knzklive/config.js
+misc/config.js
