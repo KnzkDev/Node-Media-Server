@@ -1,6 +1,7 @@
 const NodeMediaServer = require('../node_media_server');
 const knzk = require('../knzk');
 
+const conf = require('./config');
 const IS_DEBUG = process.env.NODE_ENV === 'development';
 
 const config = {
