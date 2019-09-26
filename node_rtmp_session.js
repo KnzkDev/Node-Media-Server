@@ -14,7 +14,7 @@ const NodeCoreUtils = require("./node_core_utils");
 const NodeFlvSession = require("./node_flv_session");
 const context = require("./node_core_ctx");
 const Logger = require("./node_core_logger");
-const knzk = require('./knzk');
+const API = require('./misc/api');
 
 const N_CHUNK_STREAM = 8;
 const RTMP_VERSION = 3;
@@ -1022,7 +1022,7 @@ class NodeRtmpSession {
       }
     }
 
-    knzk.api(this.publishArgs.token, this.publishStreamPath, 'pre_publish').then(() => {
+    API.api(this.publishArgs.token, this.publishStreamPath, 'pre_publish').then(() => {
       if (context.publishers.has(this.publishStreamPath)) {
         Logger.log(`[rtmp publish] Already has a stream. id=${this.id} streamPath=${this.publishStreamPath} streamId=${this.publishStreamId}`);
         this.sendStatusMessage(this.publishStreamId, "error", "NetStream.Publish.BadName", "Stream already publishing");

@@ -1,5 +1,5 @@
 const NodeMediaServer = require('../node_media_server');
-const knzk = require('../knzk');
+const API = require('./api');
 
 const conf = require('./config');
 const IS_DEBUG = process.env.NODE_ENV === 'development';
@@ -49,4 +49,4 @@ const nms = new NodeMediaServer(config);
 nms.run();
 
 nms.on('donePublish', (id, StreamPath, args) => 
-  knzk.api(args.token, StreamPath, 'done_publish'));
+  API.api(args.token, StreamPath, 'done_publish'));
