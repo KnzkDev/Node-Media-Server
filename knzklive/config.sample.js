@@ -1,5 +1,5 @@
 module.exports = {
-  endpoint: 'https://live.knzk.me/api/pubsv/',
+  APIUrl: 'https://live.knzk.me/api/pubsv/publish.php',
   APIKey: 'xxxxx',
   http_port: 8000,
   /*

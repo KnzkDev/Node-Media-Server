@@ -1,8 +1,7 @@
 const NodeMediaServer = require('../node_media_server');
-const axios = require('axios');
-// eslint-disable-next-line import/no-unresolved
-const conf = require('./config');
+const knzk = require('../knzk');
 
+const conf = require('./config');
 const IS_DEBUG = process.env.NODE_ENV === 'development';
 
 const config = {
@@ -18,11 +17,6 @@ const config = {
     port: conf.http_port,
     allow_origin: '*',
     mediaroot: './media'
-  },
-  knzklive: {
-    api_endpoint: conf.endpoint,
-    api_key: conf.APIKey,
-    ignore_auth: !!IS_DEBUG
   }
 };
 
@@ -54,21 +48,5 @@ if (conf.ffmpeg_path) {
 const nms = new NodeMediaServer(config);
 nms.run();
 
-nms.on('donePublish', (id, StreamPath, args) => {
-  axios
-    .get(
-      `${config.knzklive.api_endpoint}publish.php?token=${
-        args.token
-      }&live=${StreamPath}&authorization=${
-        config.knzklive.api_key
-      }&mode=done_publish`
-    )
-    .then(response => {
-      // eslint-disable-next-line no-console
-      console.log('[donePublish]', response);
-    })
-    .catch(error => {
-      // eslint-disable-next-line no-console
-      console.log('[donePublish]', error);
-    });
-});
+nms.on('donePublish', (id, StreamPath, args) => 
+  knzk.api(args.token, StreamPath, 'done_publish'));

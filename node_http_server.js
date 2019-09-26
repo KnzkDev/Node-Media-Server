@@ -60,7 +60,7 @@ class NodeHttpServer {
       app.use('/api/server', serverRoute(context));
       app.use('/api/relay', relayRoute(context));
     }
-    app.use('/api/knzk', knzk.router(context, this.config));
+    app.use('/api/knzk', knzk.router(context));
 
     app.use(Express.static(path.join(__dirname + '/public')));
     app.use(Express.static(this.mediaroot));
